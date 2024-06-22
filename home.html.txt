@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swazei Shop</title>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>Swazei Shop</h1>
+            <nav>
+                <a href="/login">Login</a>
+                <a href="/register">Register</a>
+                <a href="/cart">Cart</a>
+            </nav>
+        </header>
+        <main>
+            <div class="product-list">
+                @foreach ($products as $product)
+                <div class="product-item">
+                    <h2>{{ $product->name }}</h2>
+                    <p>{{ $product->description }}</p>
+                    <p>${{ $product->price }}</p>
+                    <button class="add-to-cart" data-id="{{ $product->id }}">Add to Cart</button>
+                </div>
+                @endforeach
+            </div>
+        </main>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('.add-to-cart').click(function() {
+                var productId = $(this).data('id');
+                $.post('/add-to-cart', {id: productId}, function(response) {
+                    alert('Product added to cart');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Product;
+use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
+
+class CartController extends Controller
+{
+    public function addToCart(Request $request)
+    {
+        $product = Product::find($request->id);
+        $order = new Order();
+        $order->user_id = Auth::id();
+        $order->product_id = $product->id;
+        $order->quantity = 1; // default quantity for now
+        $order->total_price = $product->price;
+        $order->save();
+        return response()->json(['success' => true]);
+    }
+
+    public function viewCart()
+    {
+        $orders = Order::where('user_id', Auth::id())->get();
+        return view('cart', compact('orders'));
+    }
+}
